@@ -5,7 +5,8 @@ import MyContext from './MyContext';
 function MyProvider({ children }) {
   const endpoint = 'https://swapi-trybe.herokuapp.com/api/planets/';
   const [data, setPlanets] = useState([]);
-  // const [stateB, setStateB] = useState('initialStateB');
+  const [name, setFilterByName] = useState('');
+  const [filtered, setFiltered] = useState([]);
 
   // Faz a requisição para API, funcionando como um componentDidMount()
   useEffect(() => {
@@ -13,12 +14,17 @@ function MyProvider({ children }) {
       const { results } = await fetch(endpoint)
         .then((response) => response.json());
       setPlanets(results);
+      setFiltered(results);
     };
     getPlanets();
   }, []);
 
   const contextValue = {
     data,
+    filterByName: { name },
+    setFilterByName,
+    filtered,
+    setFiltered,
   };
 
   return (
