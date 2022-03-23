@@ -6,7 +6,6 @@ function MyProvider({ children }) {
   const endpoint = 'https://swapi-trybe.herokuapp.com/api/planets/';
   const [data, setPlanets] = useState([]);
   const [name, setFilterByName] = useState('');
-  const [filtered, setFiltered] = useState([]);
   const [filterByNumericValues, setFilterByNumericValues] = useState([]);
 
   // Faz a requisição para API, funcionando como um componentDidMount()
@@ -15,7 +14,6 @@ function MyProvider({ children }) {
       const { results } = await fetch(endpoint)
         .then((response) => response.json());
       setPlanets(results);
-      setFiltered(results);
     };
     getPlanets();
   }, []);
@@ -24,8 +22,6 @@ function MyProvider({ children }) {
     data,
     filterByName: { name },
     setFilterByName,
-    filtered,
-    setFiltered,
     filterByNumericValues,
     setFilterByNumericValues,
   };

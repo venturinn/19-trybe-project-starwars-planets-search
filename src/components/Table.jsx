@@ -2,8 +2,29 @@ import React, { useContext } from 'react';
 import MyContext from './MyContext';
 
 function Table() {
-  const { filtered } = useContext(MyContext);
+  const { data, filterByName, filterByNumericValues } = useContext(MyContext);
+
+  console.log(filterByName.name);
+
+  const filteredByName = data.filter(
+    (planet) => planet.name.toLowerCase().includes(filterByName.name)
+  || planet.name.includes(filterByName.name),
+  );
+
+  // filtra o resultado do primeiro filtro (filteredByName)
+  const filtered = filteredByName.filter((planet) => {
+    const { column, comparison, value } = filterByNumericValues;
+    if (comparison === 'maior que') {
+      return Number(planet[column]) > Number(value);
+    } if (comparison === 'menor que') {
+      return Number(planet[column]) < Number(value);
+    } if (comparison === 'igual a') {
+      return Number(planet[column]) === Number(value);
+    } return planet;
+  });
+
   console.log(filtered);
+
   return (
     <table>
       <thead>
