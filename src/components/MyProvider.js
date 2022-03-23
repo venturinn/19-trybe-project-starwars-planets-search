@@ -7,6 +7,7 @@ function MyProvider({ children }) {
   const [data, setPlanets] = useState([]);
   const [name, setFilterByName] = useState('');
   const [filtered, setFiltered] = useState([]);
+  const [filterByNumericValues, setFilterByNumericValues] = useState([]);
 
   // Faz a requisição para API, funcionando como um componentDidMount()
   useEffect(() => {
@@ -25,6 +26,8 @@ function MyProvider({ children }) {
     setFilterByName,
     filtered,
     setFiltered,
+    filterByNumericValues,
+    setFilterByNumericValues,
   };
 
   return (
