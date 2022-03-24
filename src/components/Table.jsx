@@ -74,7 +74,6 @@ function Table() {
 
   finalFiltered = initialOrder(finalFiltered);
 
-  // REF.:https://pt.stackoverflow.com/questions/46600/como-ordenar-uma-array-de-objetos-com-array-sort
   if (order !== null) {
     if (order.sort === 'ASC') {
       finalFiltered = sortASC(finalFiltered, order);
