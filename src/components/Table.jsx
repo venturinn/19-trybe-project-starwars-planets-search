@@ -11,19 +11,23 @@ function Table() {
   || planet.name.includes(filterByName.name),
   );
 
-  // filtra o resultado do primeiro filtro (filteredByName)
-  const filtered = filteredByName.filter((planet) => {
-    const { column, comparison, value } = filterByNumericValues;
-    if (comparison === 'maior que') {
-      return Number(planet[column]) > Number(value);
-    } if (comparison === 'menor que') {
-      return Number(planet[column]) < Number(value);
-    } if (comparison === 'igual a') {
-      return Number(planet[column]) === Number(value);
-    } return planet;
+  console.log(filterByNumericValues);
+
+  let finalFiltered = filteredByName;
+  filterByNumericValues.forEach((element) => {
+    const { column, comparison, value } = element;
+    finalFiltered = finalFiltered.filter((planet) => {
+      if (comparison === 'maior que') {
+        return Number(planet[column]) > Number(value);
+      } if (comparison === 'menor que') {
+        return Number(planet[column]) < Number(value);
+      } if (comparison === 'igual a') {
+        return Number(planet[column]) === Number(value);
+      } return planet;
+    });
   });
 
-  console.log(filtered);
+  console.log(finalFiltered);
 
   return (
     <table>
@@ -45,7 +49,7 @@ function Table() {
         </tr>
       </thead>
       <tbody>
-        {filtered.map((planet, index) => (
+        {finalFiltered.map((planet, index) => (
           <tr key={ index }>
             <td>{planet.name}</td>
             <td>{planet.rotation_period}</td>

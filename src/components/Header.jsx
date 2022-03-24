@@ -9,6 +9,7 @@ function Header() {
   const {
     setFilterByName,
     setFilterByNumericValues,
+    filterByNumericValues,
   } = useContext(MyContext);
 
   const nameFilter = ({ target }) => {
@@ -28,7 +29,7 @@ function Header() {
 
   const numberFilter = () => {
     setFilterByNumericValues(
-      { column: columnFilter, comparison: comparisonFilter, value: valueFilter },
+      [...filterByNumericValues, { column: columnFilter, comparison: comparisonFilter, value: valueFilter }],
     );
   };
 
