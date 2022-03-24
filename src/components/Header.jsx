@@ -6,12 +6,16 @@ function Header() {
   const [comparisonFilter, setComparisonFilter] = useState('maior que');
   const [valueFilter, setValueFilter] = useState('0');
 
+  const [orderColumn, setorderColumn] = useState('population');
+  const [orderSort, setorderSort] = useState('ASC');
+
   const {
     setFilterByName,
     setFilterByNumericValues,
     filterByNumericValues,
     numberColumnFilter,
     setNumberColumnFilter,
+    setOrder,
   } = useContext(MyContext);
 
   const nameFilter = ({ target }) => {
@@ -26,6 +30,15 @@ function Header() {
       setComparisonFilter(value);
     } else {
       setValueFilter(value);
+    }
+  };
+
+  const handleChangeOrder = ({ target }) => {
+    const { value, name } = target;
+    if (name === 'radio') {
+      setorderSort(value);
+    } else {
+      setorderColumn(value);
     }
   };
 
@@ -58,6 +71,12 @@ function Header() {
     const newFilterByNumericValues = filterByNumericValues;
     newFilterByNumericValues.splice(index, 1);
     setFilterByNumericValues(newFilterByNumericValues);
+  };
+
+  const orderPlanets = () => {
+    const newOrder = { column: orderColumn,
+      sort: orderSort };
+    setOrder(newOrder);
   };
 
   return (
@@ -121,6 +140,59 @@ function Header() {
           Remove All Filters
         </button>
         <hr />
+        <select
+          name="orderColumn"
+          data-testid="column-sort"
+          value={ orderColumn }
+          onChange={ handleChangeOrder }
+        >
+          <option>
+            population
+          </option>
+          <option>
+            orbital_period
+          </option>
+          <option>
+            diameter
+          </option>
+          <option>
+            rotation_period
+          </option>
+          <option>
+            surface_water
+          </option>
+        </select>
+        <br />
+        <label htmlFor="radioo">
+          Ascending
+          <input
+            name="radio"
+            type="radio"
+            value="ASC"
+            onClick={ handleChangeOrder }
+            data-testid="column-sort-input-asc"
+          />
+        </label>
+        <br />
+        <label htmlFor="radio">
+          Descending
+          <input
+            name="radio"
+            type="radio"
+            value="DESC"
+            onClick={ handleChangeOrder }
+            data-testid="column-sort-input-desc"
+          />
+        </label>
+        <br />
+        <button
+          data-testid="column-sort-button"
+          type="button"
+          onClick={ orderPlanets }
+        >
+          Order
+        </button>
+        <hr />
         {filterByNumericValues.map((element, index) => (
           <div data-testid="filter" key={ index }>
             <span>{`${element.column} ${element.comparison} ${element.value}`}</span>
@@ -133,10 +205,8 @@ function Header() {
             </button>
           </div>
         ))}
-
       </form>
     </div>
-
   );
 }
 

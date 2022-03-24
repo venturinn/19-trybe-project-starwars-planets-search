@@ -1,10 +1,56 @@
 import React, { useContext } from 'react';
 import MyContext from './MyContext';
 
-function Table() {
-  const { data, filterByName, filterByNumericValues } = useContext(MyContext);
+const initialOrder = (finalFiltered) => {
+  finalFiltered.sort((a, b) => {
+    const oneNegative = -1;
+    if (a.name < b.name) {
+      return oneNegative;
+    } if (a.name < b.name) {
+      return 1;
+    }
+    return 0;
+  });
+  return finalFiltered;
+};
 
-  console.log(filterByName.name);
+const sortASC = (finalFiltered, order) => {
+  finalFiltered.sort((a, b) => {
+    const oneNegative = -1;
+    const numberA = Number(a[order.column]);
+    const numberB = Number(b[order.column]);
+    if (!Number.isNaN(numberA) && Number.isNaN(numberB)) return oneNegative;
+    if (Number.isNaN(numberA) && !Number.isNaN(numberB)) return 1;
+    if (numberA < numberB) {
+      return oneNegative;
+    } if (numberA > numberB) {
+      return 1;
+    }
+    return 0;
+  });
+  return finalFiltered;
+};
+
+const sortDESC = (finalFiltered, order) => {
+  const oneNegative = -1;
+  finalFiltered.sort((a, b) => {
+    const numberA = Number(a[order.column]);
+    const numberB = Number(b[order.column]);
+    if (!Number.isNaN(numberA) && Number.isNaN(numberB)) return oneNegative;
+    if (Number.isNaN(numberA) && !Number.isNaN(numberB)) return 1;
+    if (numberA < numberB) {
+      return 1;
+    } if (numberA > numberB) {
+      return oneNegative;
+    }
+    return 0;
+  });
+
+  return finalFiltered;
+};
+
+function Table() {
+  const { data, filterByName, filterByNumericValues, order } = useContext(MyContext);
 
   const filteredByName = data.filter(
     (planet) => planet.name.toLowerCase().includes(filterByName.name)
@@ -12,6 +58,7 @@ function Table() {
   );
 
   let finalFiltered = filteredByName;
+
   filterByNumericValues.forEach((element) => {
     const { column, comparison, value } = element;
     finalFiltered = finalFiltered.filter((planet) => {
@@ -25,7 +72,16 @@ function Table() {
     });
   });
 
-  console.log(finalFiltered);
+  finalFiltered = initialOrder(finalFiltered);
+
+  // REF.:https://pt.stackoverflow.com/questions/46600/como-ordenar-uma-array-de-objetos-com-array-sort
+  if (order !== null) {
+    if (order.sort === 'ASC') {
+      finalFiltered = sortASC(finalFiltered, order);
+    } if (order.sort === 'DESC') {
+      finalFiltered = sortDESC(finalFiltered, order);
+    }
+  }
 
   return (
     <table>
@@ -49,7 +105,7 @@ function Table() {
       <tbody>
         {finalFiltered.map((planet, index) => (
           <tr key={ index }>
-            <td>{planet.name}</td>
+            <td data-testid="planet-name">{planet.name}</td>
             <td>{planet.rotation_period}</td>
             <td>{planet.orbital_period}</td>
             <td>{planet.diameter}</td>

@@ -10,6 +10,7 @@ function MyProvider({ children }) {
   const [name, setFilterByName] = useState('');
   const [filterByNumericValues, setFilterByNumericValues] = useState([]);
   const [numberColumnFilter, setNumberColumnFilter] = useState(COLLUMN_FILTER_NAMES);
+  const [order, setOrder] = useState(null);
 
   // Faz a requisição para API, funcionando como um componentDidMount()
   useEffect(() => {
@@ -29,6 +30,8 @@ function MyProvider({ children }) {
     setFilterByNumericValues,
     numberColumnFilter,
     setNumberColumnFilter,
+    order,
+    setOrder,
   };
 
   return (
@@ -38,13 +41,8 @@ function MyProvider({ children }) {
   );
 }
 
-// Ref.:https://github.com/yannickcr/eslint-plugin-react/issues/7
 MyProvider.propTypes = {
-  children: PropTypes.element.isRequired,
+  children: PropTypes.arrayOf(PropTypes.objectOf).isRequired,
 };
-
-// MyProvider.defaultProps = {
-//   children: {},
-// };
 
 export default MyProvider;
