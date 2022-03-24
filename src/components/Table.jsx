@@ -11,8 +11,6 @@ function Table() {
   || planet.name.includes(filterByName.name),
   );
 
-  console.log(filterByNumericValues);
-
   let finalFiltered = filteredByName;
   filterByNumericValues.forEach((element) => {
     const { column, comparison, value } = element;

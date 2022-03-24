@@ -41,6 +41,25 @@ function Header() {
     );
   };
 
+  const removeAllFilters = () => {
+    const COLLUMN_FILTER_NAMES = ['population',
+      'orbital_period', 'diameter', 'rotation_period', 'surface_water'];
+    setNumberColumnFilter(COLLUMN_FILTER_NAMES);
+    setFilterByNumericValues([]);
+  };
+
+  const removeFilter = ({ target }) => {
+    const index = target.id;
+
+    const columnFilterName = filterByNumericValues[index].column;
+    const newNumberColumnFilter = [...numberColumnFilter, columnFilterName];
+    setNumberColumnFilter(newNumberColumnFilter);
+
+    const newFilterByNumericValues = filterByNumericValues;
+    newFilterByNumericValues.splice(index, 1);
+    setFilterByNumericValues(newFilterByNumericValues);
+  };
+
   return (
     <div>
       <form>
@@ -57,8 +76,8 @@ function Header() {
           value={ columnFilter }
           onChange={ handleChange }
         >
-          {numberColumnFilter.map((element) => (
-            <option key={ element }>
+          {numberColumnFilter.map((element, index) => (
+            <option key={ index }>
               {element}
             </option>
           ))}
@@ -93,8 +112,27 @@ function Header() {
           onClick={ numberFilter }
         >
           Filter
-
         </button>
+        <button
+          type="button"
+          data-testid="button-remove-filters"
+          onClick={ removeAllFilters }
+        >
+          Remove All Filters
+        </button>
+        <hr />
+        {filterByNumericValues.map((element, index) => (
+          <div data-testid="filter" key={ index }>
+            <span>{`${element.column} ${element.comparison} ${element.value}`}</span>
+            <button
+              type="button"
+              id={ index }
+              onClick={ removeFilter }
+            >
+              x
+            </button>
+          </div>
+        ))}
 
       </form>
     </div>
