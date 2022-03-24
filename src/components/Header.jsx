@@ -10,6 +10,8 @@ function Header() {
     setFilterByName,
     setFilterByNumericValues,
     filterByNumericValues,
+    numberColumnFilter,
+    setNumberColumnFilter,
   } = useContext(MyContext);
 
   const nameFilter = ({ target }) => {
@@ -28,8 +30,14 @@ function Header() {
   };
 
   const numberFilter = () => {
+    const newNumberColumnFilter = numberColumnFilter;
+    const indexColumnName = numberColumnFilter.indexOf(columnFilter);
+    newNumberColumnFilter.splice(indexColumnName, 1);
+    setNumberColumnFilter(newNumberColumnFilter);
+
     setFilterByNumericValues(
-      [...filterByNumericValues, { column: columnFilter, comparison: comparisonFilter, value: valueFilter }],
+      [...filterByNumericValues,
+        { column: columnFilter, comparison: comparisonFilter, value: valueFilter }],
     );
   };
 
@@ -49,21 +57,11 @@ function Header() {
           value={ columnFilter }
           onChange={ handleChange }
         >
-          <option>
-            population
-          </option>
-          <option>
-            orbital_period
-          </option>
-          <option>
-            diameter
-          </option>
-          <option>
-            rotation_period
-          </option>
-          <option>
-            surface_water
-          </option>
+          {numberColumnFilter.map((element) => (
+            <option key={ element }>
+              {element}
+            </option>
+          ))}
         </select>
         <select
           id="comparison-filter"

@@ -3,15 +3,18 @@ import PropTypes from 'prop-types';
 import MyContext from './MyContext';
 
 function MyProvider({ children }) {
-  const endpoint = 'https://swapi-trybe.herokuapp.com/api/planets/';
+  const ENDPOINT = 'https://swapi-trybe.herokuapp.com/api/planets/';
+  const COLLUMN_FILTER_NAMES = ['population',
+    'orbital_period', 'diameter', 'rotation_period', 'surface_water'];
   const [data, setPlanets] = useState([]);
   const [name, setFilterByName] = useState('');
   const [filterByNumericValues, setFilterByNumericValues] = useState([]);
+  const [numberColumnFilter, setNumberColumnFilter] = useState(COLLUMN_FILTER_NAMES);
 
   // Faz a requisição para API, funcionando como um componentDidMount()
   useEffect(() => {
     const getPlanets = async () => {
-      const { results } = await fetch(endpoint)
+      const { results } = await fetch(ENDPOINT)
         .then((response) => response.json());
       setPlanets(results);
     };
@@ -24,6 +27,8 @@ function MyProvider({ children }) {
     setFilterByName,
     filterByNumericValues,
     setFilterByNumericValues,
+    numberColumnFilter,
+    setNumberColumnFilter,
   };
 
   return (
